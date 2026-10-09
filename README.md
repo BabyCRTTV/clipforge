@@ -1,5 +1,7 @@
 # ClipForge by 8BitTrade
 
+**[Open ClipForge](https://babycrttv.github.io/clipforge/)** · **[Download the desktop engine](https://babycrttv.github.io/clipforge/clipforge-v0.1.0.zip)**
+
 The complete project is in **BabyCRTTV/clipforge** on GitHub: source code, desktop engine, website, launchers, tests, and packaging. No ChatGPT login or ChatGPT-hosted service is required. Use **Code → Download ZIP** to download the complete project, or download the prepared application from `dist/clipforge-v0.1.0.zip`.
 
 A local-first short-form video studio. Paste a YouTube video link or upload an original video, choose a time range, frame it in 9:16, generate and edit captions, then download a high-quality MP4 and SRT. No watermark or paid transcription API.
@@ -79,7 +81,7 @@ Run `python -m unittest discover -s tests -v` and `node --check dist/app.js`. In
 
 ## v0.1.0 validation
 
-Verified: URL/range validation, caption escaping and timing validation, exact 9:16 crop and fit exports, source frame-rate preservation, audio export, HTTP upload, queued processing, MP4/SRT downloads, byte-range serving, and rejected cross-origin mutations. Real generated speech was used to exercise transcription. YouTube end-to-end download could not be verified in the development environment because its outbound proxy rejected TLS certificates; TLS verification remains enabled. Automated browser/UI testing was unavailable. Windows/macOS launcher behavior was not tested on those systems.
+Verified: URL/range validation, caption escaping and timing validation, exact 9:16 crop and fit exports, source frame-rate preservation, audio export, HTTP upload, queued processing, MP4/SRT downloads, byte-range serving, and rejected cross-origin mutations. Real generated speech was used to exercise transcription. YouTube end-to-end download could not be verified in the development environment because its outbound proxy rejected TLS certificates; TLS verification remains enabled. The public GitHub Pages website and application download were checked in Chrome; full local editor browser automation was unavailable. Windows/macOS launcher behavior was not tested on those systems.
 
 Built with FFmpeg, yt-dlp, and faster-whisper. See their respective projects and licenses:
 - https://ffmpeg.org/
