@@ -1,5 +1,7 @@
 # ClipForge by 8BitTrade
 
+[Open the studio and download ClipForge](https://eightbittrade-clipforge.elven-comet-7060.chatgpt.site) · [Download v0.1.0 package](dist/clipforge-v0.1.0.zip)
+
 A local-first short-form video studio. Paste a YouTube video link or upload an original video, choose a time range, frame it in 9:16, generate and edit captions, then download a high-quality MP4 and SRT. No watermark or paid transcription API.
 
 ## Quick start — Windows
