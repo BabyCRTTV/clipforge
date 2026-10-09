@@ -1,6 +1,6 @@
 # ClipForge by 8BitTrade
 
-[Open the studio and download ClipForge](https://eightbittrade-clipforge.elven-comet-7060.chatgpt.site) · [Download v0.1.0 package](dist/clipforge-v0.1.0.zip)
+The complete project is in **BabyCRTTV/clipforge** on GitHub: source code, desktop engine, website, launchers, tests, and packaging. No ChatGPT login or ChatGPT-hosted service is required. Use **Code → Download ZIP** to download the complete project, or download the prepared application from `dist/clipforge-v0.1.0.zip`.
 
 A local-first short-form video studio. Paste a YouTube video link or upload an original video, choose a time range, frame it in 9:16, generate and edit captions, then download a high-quality MP4 and SRT. No watermark or paid transcription API.
 
@@ -70,8 +70,12 @@ Use videos you own or have permission to edit and repost.
 - `engine/server.py` — loopback HTTP server and serialized job queue.
 - `tests/` — validations and actual FFmpeg/HTTP integration tests.
 - `requirements.txt` — tested direct dependencies, including a compatible PyAV version.
+- `scripts/package.py` — regenerates the complete portable application ZIP.
+- `.github/workflows/pages.yml` — packages and publishes the website on GitHub Pages.
 
-Run `python -m unittest discover -s tests -v` and `node --check dist/app.js`. Integration tests skip when the generated video fixture is missing; `python tests/make_fixture.py` creates one. The hosted site can be served from `dist/` on GitHub Pages. Keep Python engine processing local.
+Regenerate the application ZIP after code changes with `python scripts/package.py`. This requires only Python, and does not install media-processing dependencies.
+
+Run `python -m unittest discover -s tests -v` and `node --check dist/app.js`. Integration tests skip when the generated video fixture is missing; `python tests/make_fixture.py` creates one. The GitHub Pages workflow builds the application ZIP and deploys `dist/`. Enable Pages with **GitHub Actions** as its source in repository settings. The Pages deployment runs only for a public repository; free accounts need public visibility to enable Pages. Keep Python engine processing local. The site and source have no dependency on ChatGPT hosting.
 
 ## v0.1.0 validation
 
