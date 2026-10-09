@@ -3,3 +3,13 @@ __pycache__/
 *.pyc
 .clipforge/
 tests/fixtures/
+
+android/.gradle/
+android/**/build/
+android/**/.cxx/
+android/local.properties
+android/vendor/
+android/signing/
+*.apk
+android/app/src/androidTest/assets/*.bin
+android/app/src/androidTest/assets/*.mp4
