@@ -51,10 +51,19 @@ jobs:
           target: google_apis
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: cd android && bash gradlew connectedDebugAndroidTest
+          script: |
+            cd android
+            bash gradlew connectedDebugAndroidTest
+            mkdir -p app/build/reports/device-preview
+            for stage in 0 1 2 3; do
+              adb exec-out run-as com.eightbittrade.clipforge cat files/qa-step-$stage.png > app/build/reports/device-preview/step-$stage.png
+            done
+            adb exec-out run-as com.eightbittrade.clipforge cat cache/pipeline-portrait.mp4 > app/build/reports/device-preview/portrait.mp4
       - name: Upload integration reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: android-integration-results
-          path: android/app/build/reports/androidTests
+          path: |
+            android/app/build/reports/androidTests
+            android/app/build/reports/device-preview
