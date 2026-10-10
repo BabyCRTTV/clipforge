@@ -16,10 +16,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
+@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
 public class PipelineTest {
  private Context ctx;private File source,model;
  @Before public void fixture()throws Exception{ctx=InstrumentationRegistry.getInstrumentation().getTargetContext();source=asset("fixture.mp4");model=asset("ggml-base.en.bin");}
- private File asset(String name)throws Exception{File f=new File(ctx.getCacheDir(),name);if(!f.exists())try(InputStream in=InstrumentationRegistry.getInstrumentation().getContext().getAssets().open(name);OutputStream out=new FileOutputStream(f)){in.transferTo(out);}return f;}
+ private File asset(String name)throws Exception{File f=new File(ctx.getCacheDir(),name);if(!f.exists())try(InputStream in=InstrumentationRegistry.getInstrumentation().getContext().getAssets().open(name);OutputStream out=new FileOutputStream(f)){byte[] copyBuffer=new byte[65536];int copied;while((copied=in.read(copyBuffer))!=-1)out.write(copyBuffer,0,copied);}return f;}
  @Test public void recognizesSpeechExportsPortraitAndSavesGallery()throws Exception{
   List<Word> words=Speech.transcribe(source,0,11,model,new AtomicBoolean(),m->{});StringBuilder transcript=new StringBuilder();for(Word w:words){transcript.append(w.text).append(' ');assertTrue(w.start>=0);assertTrue(w.end>w.start);assertTrue(w.start<11.1);}String text=transcript.toString().toLowerCase(Locale.ROOT);assertTrue("Recognized: "+text,text.contains("country"));assertTrue(text.contains("ask"));assertTrue(words.size()>8);
   android.app.Activity activity=InstrumentationRegistry.getInstrumentation().startActivitySync(new Intent(ctx,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

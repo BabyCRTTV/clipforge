@@ -2,6 +2,7 @@ package com.eightbittrade.clipforge;
 import android.graphics.*;
 import androidx.media3.effect.BitmapOverlay;
 import java.util.*;
+@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
 public class CaptionOverlay extends BitmapOverlay {
  public static class Phrase {public List<Word> words=new ArrayList<>();public double start(){return words.get(0).start;}public double end(){return words.get(words.size()-1).end;}public String text(){StringBuilder s=new StringBuilder();for(Word w:words)s.append(w.text).append(' ');return s.toString().trim();}}
  public static List<Phrase> phrases(List<Word> words){List<Phrase> result=new ArrayList<>();Phrase p=new Phrase();for(Word w:words){if(!p.words.isEmpty()&&(p.words.size()>=4||w.start-p.end()>.5||p.words.get(p.words.size()-1).text.matches(".*[.!?]$"))){result.add(p);p=new Phrase();}p.words.add(w);}if(!p.words.isEmpty())result.add(p);return result;}

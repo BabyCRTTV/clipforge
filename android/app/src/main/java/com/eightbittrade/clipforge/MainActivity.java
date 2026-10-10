@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
 public class MainActivity extends Activity {
  private final int BG=Color.rgb(17,20,27),CARD=Color.rgb(29,34,44),INK=Color.rgb(242,242,249),MUTED=Color.rgb(169,180,194),ACCENT=Color.rgb(184,162,255);
  private LinearLayout root,body;private TextView status;private ProgressBar progress;private Button cancelButton;private EditText url,startInput,endInput;private Spinner framing,captionStyle,modelChoice;private SeekBar position;private ExoPlayer player;private Transformer transformer;
