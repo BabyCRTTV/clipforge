@@ -10,6 +10,7 @@ jobs:
   apk:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         api: [29, 35]
     steps:
@@ -30,7 +31,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Build APK and test recommendation logic
         working-directory: android
-        run: bash gradlew assembleDebug testDebugUnitTest
+        run: bash gradlew assembleDebug assembleRelease testDebugUnitTest lintDebug
       - uses: actions/upload-artifact@v4
         with:
           name: clipforge-android-debug-${{ matrix.api }}
@@ -39,6 +40,19 @@ jobs:
         with:
           name: android-test-results-${{ matrix.api }}
           path: android/app/build/test-results
+      - name: Prepare release signing tools
+        if: matrix.api == 35
+        run: |
+          mkdir -p android/release-tooling
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" android/release-tooling/
+          cp "$ANDROID_HOME/build-tools/35.0.0/zipalign" android/release-tooling/
+      - uses: actions/upload-artifact@v4
+        if: matrix.api == 35
+        with:
+          name: clipforge-android-release-unsigned
+          path: |
+            android/app/build/outputs/apk/release/app-release-unsigned.apk
+            android/release-tooling
       - name: Install video fixture generator
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Prepare integration speech and video fixture
