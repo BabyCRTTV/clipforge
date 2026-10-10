@@ -1,6 +1,6 @@
 # ClipForge by 8BitTrade
 
-**Android preview:** [Download the APK](https://github.com/BabyCRTTV/clipforge/releases/tag/v0.2.0-android-preview) · [Guided app instructions](android/README.md). Native on-device speech recognition, default highlight recommendations, 9:16 framing, editable captions with word highlighting, and Save to Gallery. The desktop engine below remains available separately.
+**Android preview:** [Download the APK](https://github.com/BabyCRTTV/clipforge/releases/tag/v0.2.2-android-preview) · [Guided app instructions](android/README.md). Native on-device speech recognition, default highlight recommendations, 9:16 framing, editable captions with word highlighting, and Save to Gallery. The desktop engine below remains available separately.
 
 
 **[Open ClipForge](https://babycrttv.github.io/clipforge/)** · **[Download the desktop engine](https://babycrttv.github.io/clipforge/clipforge-v0.1.0.zip)**
