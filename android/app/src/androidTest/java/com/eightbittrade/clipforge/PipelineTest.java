@@ -40,5 +40,12 @@ public class PipelineTest {
  }
  private void set(Object target,String name,Object value)throws Exception{java.lang.reflect.Field f=MainActivity.class.getDeclaredField(name);f.setAccessible(true);f.set(target,value);}
  @Test public void embeddedDownloaderStartsWithoutPermissions()throws Exception{assertEquals("2026.08.19",YouTube.engine(ctx).callAttr("engine_version").toString());assertTrue(com.chaquo.python.Python.getInstance().getModule("sys").get("version").toString().startsWith("3.13"));assertEquals("{\"ok\":true}",QuickJs.evaluate("console.log(JSON.stringify({ok: [1,2,3].map(x=>x*x)[2]===9 && typeof fetch===\"undefined\" && typeof std===\"undefined\"}))",new AtomicBoolean()));}
+ @Test public void processesRealYouTubePlayerSignatures()throws Exception{
+  String script=new String(java.nio.file.Files.readAllBytes(asset("youtube-player-check.js").toPath()),java.nio.charset.StandardCharsets.UTF_8);
+  org.json.JSONObject expected=new org.json.JSONObject(new String(java.nio.file.Files.readAllBytes(asset("youtube-player-expected.json").toPath()),java.nio.charset.StandardCharsets.UTF_8));
+  org.json.JSONArray responses=new org.json.JSONObject(QuickJs.evaluate(script,new AtomicBoolean())).getJSONArray("responses");
+  assertEquals(expected.getString("n"),responses.getJSONObject(0).getJSONObject("data").getString("IlLiA21ny7gqA2m4p37"));
+  org.json.JSONObject sig=responses.getJSONObject(1).getJSONObject("data");assertEquals(expected.getString("sig"),sig.getString(sig.keys().next()));
+ }
  @Test public void declaredPermissionsAreMinimal()throws Exception{String[] permissions=ctx.getPackageManager().getPackageInfo(ctx.getPackageName(),android.content.pm.PackageManager.GET_PERMISSIONS).requestedPermissions;Set<String>p=new HashSet<>(Arrays.asList(permissions));assertTrue(p.contains("android.permission.INTERNET"));for(String forbidden:Arrays.asList("android.permission.RECORD_AUDIO","android.permission.READ_MEDIA_VIDEO","android.permission.READ_EXTERNAL_STORAGE","android.permission.MANAGE_EXTERNAL_STORAGE","android.permission.ACCESS_FINE_LOCATION","android.permission.READ_CONTACTS"))assertFalse(forbidden,p.contains(forbidden));}
 }

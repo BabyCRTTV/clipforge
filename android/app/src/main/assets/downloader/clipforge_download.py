@@ -2,6 +2,7 @@
 import json
 import threading
 from yt_dlp import YoutubeDL
+from yt_dlp.utils import DownloadError
 from yt_dlp.extractor.youtube.jsc._builtin.ejs import EJSBaseJCP
 from yt_dlp.extractor.youtube.jsc.provider import register_provider, register_preference
 from java import jclass
@@ -9,7 +10,7 @@ from java import jclass
 _state = threading.local()
 
 @register_provider
-class AndroidQuickJS(EJSBaseJCP):
+class AndroidQuickJSJCP(EJSBaseJCP):
     PROVIDER_NAME = 'clipforge_quickjs'
     JS_RUNTIME_NAME = 'quickjs'
 
@@ -21,7 +22,7 @@ class AndroidQuickJS(EJSBaseJCP):
         cancel = callback.cancellation if callback else None
         return jclass('com.eightbittrade.clipforge.QuickJs').evaluate(stdin, cancel)
 
-@register_preference(AndroidQuickJS)
+@register_preference(AndroidQuickJSJCP)
 def preference(provider, request):
     return 1000
 
@@ -48,6 +49,7 @@ def metadata(link, callback):
     try:
         with YoutubeDL(options(callback)) as dl:
             data = dl.extract_info(link, download=False)
+            if data.get('_type') in ('playlist', 'multi_video'): raise ValueError('Choose one YouTube video rather than a playlist.')
             if data.get('is_live'): raise ValueError('Please choose a completed video. Live streams are not supported yet.')
             return json.dumps({'title': data.get('title'), 'heatmap': data.get('heatmap')})
     finally: _state.callback = None
@@ -56,8 +58,17 @@ def download(link, format, destination, callback):
     try:
         opts = options(callback)
         opts.update(format=format, outtmpl=destination, fixup='never')
-        with YoutubeDL(opts) as dl:
-            dl.extract_info(link, download=True)
+        for attempt in range(2):
+            try:
+                with YoutubeDL(opts) as dl:
+                    dl.extract_info(link, download=True)
+                break
+            except DownloadError as error:
+                if attempt or '403' not in str(error) or callback.cancelled(): raise
+                callback.message('Refreshing the YouTube stream link…')
+                # Re-extract once with a new downloader, rather than reusing a stale signed URL.
+                from pathlib import Path
+                Path(destination).unlink(missing_ok=True)
     finally: _state.callback = None
 
 def engine_version():

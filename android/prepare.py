@@ -32,3 +32,5 @@ if not (quickjs/'quickjs.c').exists():
     subprocess.run(['git','clone','--depth','1','--branch','v0.12.0','https://github.com/quickjs-ng/quickjs.git',str(quickjs)],check=True)
 if subprocess.check_output(['git','-C',str(quickjs),'rev-parse','HEAD'],text=True).strip()!='db870fd4619bf8c659cf85dd092101ea2a1a8a07':
     raise SystemExit('Unexpected QuickJS-NG tag revision; build stopped.')
+
+(assets/'QuickJS-LICENSE.txt').write_bytes((quickjs/'LICENSE').read_bytes())

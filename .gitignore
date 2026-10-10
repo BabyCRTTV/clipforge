@@ -15,3 +15,5 @@ android/app/src/androidTest/assets/*.bin
 android/app/src/androidTest/assets/*.mp4
 
 android/app/src/main/assets/downloader/*.whl
+android/app/src/androidTest/assets/youtube-player-*
+android/app/src/main/assets/downloader/QuickJS-LICENSE.txt
