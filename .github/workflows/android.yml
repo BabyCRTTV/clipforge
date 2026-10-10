@@ -25,7 +25,7 @@ jobs:
           log-accepted-android-sdk-licenses: false
       - name: Install pinned native build tools
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.2.12479018' 'cmake;3.22.1'
-      - name: Fetch pinned speech engine
+      - name: Fetch pinned speech and YouTube engines
         run: python android/prepare.py
       - uses: gradle/actions/setup-gradle@v4
       - name: Build APK and test recommendation logic
@@ -57,6 +57,16 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: bash android/run-device-checks.sh
+      - name: Check actual public YouTube imports
+        if: matrix.api == 35
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: cd android && bash gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.eightbittrade.clipforge.YouTubeTest -Pandroid.testInstrumentationRunnerArguments.youtubeLive=true
       - name: Upload integration reports
         if: always()
         uses: actions/upload-artifact@v4

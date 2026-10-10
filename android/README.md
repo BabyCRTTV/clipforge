@@ -16,7 +16,7 @@ A native app, not a website shortcut. Android 10+ on 64-bit ARM phones and x86_6
 
 Source video/audio downloads are combined without re-encoding. Rendering a vertical crop and burned-in captions necessarily re-encodes video; bit-for-bit original quality is impossible. The Android app uses Media3 and hardware H.264/AAC, retains source frame rate when the device supports it, never intentionally upscales, and caps output at 1080×1920. Dimensions are exact 9:16 with even sizes. A landscape source loses horizontal pixels when cropped. Fit keeps the whole image on a black portrait canvas. HDR input is rejected with a clear message in this preview. Codec and encoder support varies by phone.
 
-YouTube can block extraction or downloads; newer videos may require JS/PO-token support that the bundled downloader cannot supply. The app does not defeat login, age, region or bot protections. Use an original video if a link fails. Public replay data is not guaranteed even when YouTube's player shows it. This is a preview release: test it on your phone before depending on it for a posting schedule.
+YouTube can block extraction or downloads; the importer now includes a pinned QuickJS-NG engine and matching EJS scripts for current public players. Some videos still require login or tokens not available to this account-free app. The app does not defeat login, age, region or bot protections. Use an original video if a link fails. Public replay data is not guaranteed even when YouTube's player shows it. This is a preview release: test it on your phone before depending on it for a posting schedule.
 
 ## Permissions and privacy
 
@@ -32,8 +32,12 @@ python prepare.py
 ./gradlew assembleDebug testDebugUnitTest
 ```
 
-The Gradle wrapper pins Gradle 8.13. `prepare.py` pins whisper.cpp v1.7.6 by commit. Media3 1.6.1 and yt-dlp-android 2.0.2 are pinned Maven dependencies. Both arm64-v8a and x86_64 are included. Native code is built with 16 KB page-size alignment. The CI workflow publishes build artifacts. The downloadable APK is a non-debuggable release build signed with a privately retained development certificate. Its certificate SHA-256 is `c79c84a6b1c094d29f849ce1f67e2c1b014c85b1f229e3b9db0d7327f58fd4a3`. CI debug APKs are test builds and can use a different signing certificate than the downloadable manually signed preview; replacing one with the other can require uninstalling first. Production/store distribution should use a private, durable release key.
+The Gradle wrapper pins Gradle 8.13. `prepare.py` pins whisper.cpp v1.7.6 and QuickJS-NG 0.12.0 by commit, and yt-dlp 2026.08.19 / yt-dlp-ejs 0.8.0 wheels by SHA-256. Media3 1.6.1 and the Python bootstrap from yt-dlp-android 2.0.2 are pinned Maven dependencies. The wrapper’s CLI execution path is unused; app-owned Python options and the updated wheel take precedence. QuickJS has no filesystem, process, or network bindings, a 256 MB memory limit, a 30-second execution limit, and cancellation checks. Both arm64-v8a and x86_64 are included. Native code is built with 16 KB page-size alignment. The CI workflow publishes build artifacts. The downloadable APK is a non-debuggable release build signed with a privately retained development certificate. Its certificate SHA-256 is `c79c84a6b1c094d29f849ce1f67e2c1b014c85b1f229e3b9db0d7327f58fd4a3`. CI debug APKs are test builds and can use a different signing certificate than the downloadable manually signed preview; replacing one with the other can require uninstalling first. Production/store distribution should use a private, durable release key.
 
 ## Component licenses
 
 App source: MIT (repository LICENSE). whisper.cpp/ggml: MIT; downloaded models derive from OpenAI Whisper (MIT). Media3/AndroidX: Apache-2.0. yt-dlp-android: MIT; embedded yt-dlp: Unlicense, CPython: PSF, Chaquopy: its BSD license, certifi: MPL-2.0. Upstream AAR assets contain THIRD-PARTY-NOTICES.txt. All dependencies retain their own licenses. See THIRD-PARTY-NOTICES.md for source links.
+
+## YouTube import verification
+
+The default instrumented checks initialize the updated Python importer and run native JavaScript. `YouTubeTest` additionally checks real public URLs and downloads/combines playable video and audio bytes. Enable it with `-Pandroid.testInstrumentationRunnerArguments.class=com.eightbittrade.clipforge.YouTubeTest -Pandroid.testInstrumentationRunnerArguments.youtubeLive=true`. Live checks can fail on blocked hosting networks; a metadata-only response is not a successful import.

@@ -10,3 +10,7 @@
 - [certifi](https://github.com/certifi/python-certifi): MPL-2.0.
 
 These notices supplement, not replace, the licenses shipped with upstream artifacts. ClipForge ships no FFmpeg binary in its Android APK; video decoding, muxing and encoding use Android APIs/Media3.
+
+- [QuickJS-NG 0.12.0](https://github.com/quickjs-ng/quickjs/tree/db870fd4619bf8c659cf85dd092101ea2a1a8a07): MIT. Core engine only, fetched and commit-verified by `prepare.py`.
+- [yt-dlp 2026.08.19](https://github.com/yt-dlp/yt-dlp/releases/tag/2026.08.19): Unlicense. Pinned wheel retains upstream license.
+- [yt-dlp-ejs 0.8.0](https://github.com/yt-dlp/ejs): Unlicense; vendored JavaScript dependencies retain their notices in the wheel.
