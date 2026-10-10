@@ -36,6 +36,8 @@ jobs:
         with:
           name: android-test-results
           path: android/app/build/test-results
+      - name: Install video fixture generator
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Prepare integration speech and video fixture
         run: python android/test-fixture.py
       - name: Enable KVM for the Android emulator
